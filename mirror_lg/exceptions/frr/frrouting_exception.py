@@ -1,0 +1,2 @@
+class FrroutingException(Exception):
+    pass
