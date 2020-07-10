@@ -10,15 +10,6 @@ from typing import Any
 from napalm import get_network_driver
 
 
-def test_connect():
-    ios_driver = get_network_driver('ios')
-    password = 'Reload7'
-    device = ios_driver('10.23.0.100', 'root', password)
-    device.open()
-    print(device.get_config()['running'])
-    device.close()
-
-
 def ipv4_commands(prefix: str = None):
     """return list of ipv4 commands"""
 

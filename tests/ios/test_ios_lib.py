@@ -56,14 +56,3 @@ class TestIosApi(unittest.TestCase):
         self.assertEqual(traceroute_ipv6, output[1])
         self.assertEqual(show_bgp_ipv6, output[2])
         self.assertEqual(show_bgp_ipv6_summary, output[3])
-
-    def OLD_test_ssh_connect(self):
-        self.ssh_object = self.caller._ssh_client_connect(self.target_device,
-                                                          self.username,
-                                                          self.password)
-
-        self.assertEqual(self.ssh_object.target_device,
-                         self.caller.target_device)
-        self.assertEqual(self.ssh_object.ssh_key, self.caller.ssh_key)
-        self.assertEqual(self.ssh_object.username, self.caller.username)
-        self.assertEqual(self.ssh_object.password, self.caller.password)
