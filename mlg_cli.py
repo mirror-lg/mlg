@@ -7,8 +7,12 @@ import getpass
 import json
 import logging
 from typing import Generic, Dict
+from argparse import Namespace
 
+from mirror_lg.lib.shared import validate_prefix
 from mirror_lg.lib.ios.ios_lib import IosLib
+
+
 
 
 def _execute_cli() -> None:
@@ -57,12 +61,19 @@ def _execute_cli() -> None:
                                 help='bgp summary',
                                 default=False)
 
-    args = parser.parse_args()
+    arguments = parser.parse_args()
+    # pass output to selected function
+    arguments.func(arguments)
 
 
-def ios_cli(ios_lib: Generic = IosLib) -> Dict:
-    # check for valid ipv4 or ipv4 prefix
-    print("ios cli")
+def ios_cli(arguments: Namespace) -> Dict:
+    # check for valid ipv4 or ipv4 prefix -> check in shared lib?
+    print("== ios cli test ==")
+    prefix = validate_prefix(arguments.prefix)
+    if prefix.version == 6:
+        print(f"IPv6 Prefix, {prefix.exploded}")
+    else:
+        print(f"IPv4 Prefix, {prefix.exploded}")
 
 
 def frr_cli(prefix):
