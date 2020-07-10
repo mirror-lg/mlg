@@ -45,13 +45,13 @@ def ipv6_commands(prefix: str = None):
 class FrrLib:
     """Class provides methods for interaction with a device running
     frrouting suite"""
+
     def __init__(
             self,
             target_device: str = None,
             ssh_key: str = None,
             username: str = None,
             logger: logging.Logger = logging.getLogger()):
-
         self.target_device = target_device
         self.ssh_key = ssh_key
         self.username = username
@@ -61,7 +61,6 @@ class FrrLib:
                                          level=logging.DEBUG)
 
         self._load_ssh_key()
-
 
     def _load_ssh_key(self) -> None:
         """Read device, username and ssh key config from file"""
@@ -86,20 +85,18 @@ class FrrLib:
         ssh_client.close()
         self.logger.info(f"connection to {self.target_device} has been closed")
 
-
     def setup(self):
         """logger setup"""
         self.logger.basicConfig(
             filename='mlg_run.log', filemode='a',
             format='%(asctime)s - %(levelname)s - %(message)s')
 
-
     def login(self) -> None:
         """login to the device"""
 
     def run_command(self, ssh_client: Any, command: str = None,
                     prefix: str = None) -> List[str]:
-        #pylint: disable=unused-variable
+        # pylint: disable=unused-variable
         # pylint: disable=unused-argument
         """Run command on router"""
         ssh_client = self._ssh_client_connect()

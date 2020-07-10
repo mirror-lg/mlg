@@ -11,7 +11,7 @@ COPY mirror_lg mirror_lg
 COPY config config
 # add test to verify YAML config file (once config is converted to YAML)
 COPY tests tests
-COPY *.py ./
+#COPY *.py ./
 # run the tests, --skip-covered == ignore __init__.py files
 RUN python -m coverage run --branch --source=mirror_lg -m unittest discover && \
     python -m coverage report --fail-under 70 -m --skip-covered
