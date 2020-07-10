@@ -53,6 +53,7 @@ class IosLib:
             username: str = None,
             password: str = None,
             logger: logging.Logger = logging.getLogger()):
+
         self.target_device = target_device
         self.ssh_key = ssh_key
         self.username = username
