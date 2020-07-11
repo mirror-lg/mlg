@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import Mock
 from logging import Logger
 
+
 from mirror_lg.lib.ios.ios_lib import IosLib
 from mirror_lg.lib.ios.ios_lib import ipv4_commands
 from mirror_lg.lib.ios.ios_lib import ipv6_commands
@@ -9,14 +10,18 @@ from mirror_lg.lib.ios.ios_lib import ipv6_commands
 
 class TestIosApi(unittest.TestCase):
     def setUp(self):
-        logger = Logger
-        logger.basicConfig = Mock(logger)
-        self.caller = IosLib(logger=Mock(logger))
+        logger = Mock(Logger)
+        self.caller = IosLib(logger=logger)
+        self._run_command = Mock(self.caller.run_command)
+        self.ipv4_commands = ipv4_commands
 
         self.target_device = "10.1.1.1"
         self.ssh_key = "ssh_key_name"
         self.username = "username"
         self.password = "password"
+        self.ipv4_prefix = '8.8.8.8'
+        self.ipv6_prefix = '2001::1'
+
 
     def test_class_creation(self):
         self.caller = IosLib(self.target_device, self.ssh_key, self.username,
@@ -28,31 +33,42 @@ class TestIosApi(unittest.TestCase):
         self.assertEqual(self.password, self.caller.password)
 
     def test_ipv4_commands(self):
-        prefix = '1.2.3.4'
-        show_ip_route = f"show ip route {prefix}"
-        traceroute_ipv4 = f"traceroute ip {prefix}"
-        show_bgp_ipv4 = f"show ip bgp {prefix}"
-        show_ip_bgp_summary = "show ip bgp summary"
+        sh_ip_route = f"show ip route {self.ipv4_prefix}"
+        sh_ip_bgp = f"show ip bgp {self.ipv4_prefix}"
+        sh_bgp_sum = "show ip bgp summary"
+        trace = f"traceroute ip {self.ipv4_prefix}"
 
-        self.caller = ipv4_commands
-        output = self.caller(prefix)
+        caller = ipv4_commands
 
-        self.assertEqual(show_ip_route, output[0])
-        self.assertEqual(traceroute_ipv4, output[1])
-        self.assertEqual(show_bgp_ipv4, output[2])
-        self.assertEqual(show_ip_bgp_summary, output[3])
+        output = caller('sh_ip_route', self.ipv4_prefix)
+        self.assertEqual(sh_ip_route, output)
+
+        output = caller('sh_ip_bgp', self.ipv4_prefix)
+        self.assertEqual(sh_ip_bgp, output)
+
+        output = caller('trace', self.ipv4_prefix)
+        self.assertEqual(trace, output)
+
+        output = caller('sh_bgp_sum', self.ipv4_prefix)
+        self.assertEqual(sh_bgp_sum, output)
 
     def test_ipv6_commands(self):
-        prefix = '2001::1'
-        show_ipv6_route = f"show ipv6 route {prefix}"
-        traceroute_ipv6 = f"traceroute ipv6 {prefix}"
-        show_bgp_ipv6 = f"show bgp ipv6 unicast route {prefix}"
-        show_bgp_ipv6_summary = "show bgp ipv6 unicast summary"
+        sh_ip_route = f"show ipv6 route {self.ipv6_prefix}"
+        sh_ip_bgp = f"show bgp ipv6 unicast route {self.ipv6_prefix}"
+        sh_bgp_sum = "show ip bgp summary"
+        trace = f"traceroute ipv6 {self.ipv6_prefix}"
 
-        self.caller = ipv6_commands
-        output = self.caller(prefix)
+        caller = ipv6_commands
 
-        self.assertEqual(show_ipv6_route, output[0])
-        self.assertEqual(traceroute_ipv6, output[1])
-        self.assertEqual(show_bgp_ipv6, output[2])
-        self.assertEqual(show_bgp_ipv6_summary, output[3])
+        output = caller('sh_ip_route', self.ipv6_prefix)
+        self.assertEqual(sh_ip_route, output)
+
+        output = caller('sh_ip_bgp', self.ipv6_prefix)
+        self.assertEqual(sh_ip_bgp, output)
+
+        output = caller('trace', self.ipv6_prefix)
+        self.assertEqual(trace, output)
+
+        output = caller('sh_bgp_sum', self.ipv6_prefix)
+        self.assertEqual(sh_bgp_sum, output)
+
