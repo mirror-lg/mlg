@@ -24,13 +24,13 @@ class TestHelpers(unittest.TestCase):
 
     def test_validate_ipv4_prefix(self):
         output = self.helper.validate_prefix(self.ipv4_prefix)
-        expected_output = self.helper.validate_prefix(self.ipv4_prefix)
+        expected_output = ipaddress.ip_network(self.ipv4_prefix, strict=False)
 
         self.assertEqual(expected_output, output)
 
     def test_validate_ipv6_prefix(self):
         output = self.helper.validate_prefix(self.ipv6_prefix)
-        expected_output = self.helper.validate_prefix(self.ipv6_prefix)
+        expected_output = ipaddress.ip_network(self.ipv6_prefix, strict=False)
 
         self.assertEqual(expected_output, output)
 
