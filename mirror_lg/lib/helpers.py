@@ -2,12 +2,18 @@
 Shared library functions
 """
 import ipaddress
+import logging
 
 
 class Helper:
     """implements shared methods"""
 
-    def validate_prefix(prefix: str):
+    def __init__(self,
+                 logger: logging.Logger = logging.getLogger()):
+
+        self.logger = logger
+
+    def validate_prefix(self, prefix: str):
         """
         check if prefix is a valid ipv4 or ipv6 address, return an ipaddress
         object or raise exception
