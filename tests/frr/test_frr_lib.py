@@ -13,36 +13,31 @@ class TestFrrApi(unittest.TestCase):
         logger.basicConfig = Mock(logger)
         self.caller = FrrLib(logger=Mock(logger))
 
+        self.target_device = "10.23.0.9"
+        self.username = "root"
+        self.ssh_key = "/home/adam/projects/mirror-lg/ssh_keys/mirror_key"
+
     def test_class_creation(self):
-        target_device = "10.23.0.9"
-        username = "root"
-        ssh_key = "/home/adam/projects/mirror-lg/ssh_keys/mirror_key"
+        self.caller = FrrLib(self.target_device, self.ssh_key, self.username)
 
-        self.caller = FrrLib(target_device, ssh_key, username)
-
-        self.assertEqual(target_device, self.caller.target_device)
-        self.assertEqual(ssh_key, self.caller.ssh_key)
-        self.assertEqual(username, self.caller.username)
+        self.assertEqual(self.target_device, self.caller.target_device)
+        self.assertEqual(self.ssh_key, self.caller.ssh_key)
+        self.assertEqual(self.username, self.caller.username)
 
     def test_class_error_raised(self):
         # pylint: disable=unused-variable
         # pylint: disable=undefined-variable
         with self.assertRaises(NameError):
-            target_device = 'device'
-            self.caller = FrrLib(target_device, ssh_key)
-            self.caller = FrrLib(target_device, username)
+            self.target_device = 'device'
+            self.caller = FrrLib(self.target_device, ssh_key)
 
     def test_load_ssh_key(self):
-        target_device = "10.23.0.9"
-        username = "root"
-        ssh_key = "/home/adam/projects/mirror-lg/ssh_keys/mirror_key"
-
         self.caller = FrrLib()
         self.caller._load_ssh_key()
 
-        self.assertEqual(target_device, self.caller.target_device)
-        self.assertEqual(ssh_key, self.caller.ssh_key)
-        self.assertEqual(username, self.caller.username)
+        self.assertEqual(self.target_device, self.caller.target_device)
+        self.assertEqual(self.ssh_key, self.caller.ssh_key)
+        self.assertEqual(self.username, self.caller.username)
 
     def test_ipv4_commands(self):
         prefix = '1.2.3.4'
