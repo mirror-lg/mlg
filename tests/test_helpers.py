@@ -21,7 +21,6 @@ class TestHelpers(unittest.TestCase):
         self.ipv4_error = '256.256.256.256'
         self.ipv6_error = '2001::GG'
 
-
     def test_validate_ipv4_prefix(self):
         output = self.helper.validate_prefix(self.ipv4_prefix)
         expected_output = ipaddress.ip_network(self.ipv4_prefix, strict=False)
