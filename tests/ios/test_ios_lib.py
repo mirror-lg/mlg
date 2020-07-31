@@ -2,15 +2,19 @@ import unittest
 from unittest.mock import Mock
 from logging import Logger
 
+from napalm import get_network_driver
 
 from mirror_lg.lib.ios.ios_lib import IosLib
 from mirror_lg.lib.ios.ios_lib import ipv4_commands
 from mirror_lg.lib.ios.ios_lib import ipv6_commands
 
 
+# pylint: disable=too-many-instance-attributes
+# reasonable to have this many attributes as this is a test file
 class TestIosApi(unittest.TestCase):
     def setUp(self):
         logger = Mock(Logger)
+        logger.basicConfig = Mock(logger)
         self.caller = IosLib(logger=logger)
         self._run_command = Mock(self.caller.run_command)
         self.ipv4_commands = ipv4_commands
@@ -22,6 +26,8 @@ class TestIosApi(unittest.TestCase):
         self.ipv4_prefix = '8.8.8.8'
         self.ipv6_prefix = '2001::1'
 
+        self.ios_driver = Mock(get_network_driver('ios'))
+
 
     def test_class_creation(self):
         self.caller = IosLib(self.target_device, self.ssh_key, self.username,
@@ -31,6 +37,11 @@ class TestIosApi(unittest.TestCase):
         self.assertEqual(self.ssh_key, self.caller.ssh_key)
         self.assertEqual(self.username, self.caller.username)
         self.assertEqual(self.password, self.caller.password)
+
+    def test_ssh_client_connect(self):
+        ssh_client = self.caller._ssh_client_connect
+        with self.assertRaises(ValueError):
+            ssh_client()
 
     def test_ipv4_commands(self):
         sh_ip_route = f"show ip route {self.ipv4_prefix}"
@@ -71,4 +82,3 @@ class TestIosApi(unittest.TestCase):
 
         output = caller('sh_bgp_sum', self.ipv6_prefix)
         self.assertEqual(sh_bgp_sum, output)
-

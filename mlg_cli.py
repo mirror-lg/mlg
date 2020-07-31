@@ -4,9 +4,7 @@ Execute library commands from cli
 
 import argparse
 import getpass
-import sys
-import logging
-from typing import Generic, Dict
+from typing import Dict
 from argparse import Namespace
 
 from mirror_lg.lib.helpers import Helper
@@ -61,7 +59,8 @@ def _execute_cli() -> None:
                                 default=False)
     ios_cli_parser.add_argument('--backup',
                                 action='store_true',
-                                help='backup ios config', #help=argparse.SUPPRESS,
+                                help='backup ios config',
+                                # help=argparse.SUPPRESS,
                                 default=False)
 
     arguments = parser.parse_args()
@@ -91,27 +90,22 @@ def _execute_cli() -> None:
 
 def ios_cli(arguments: Namespace, caller) -> Dict:
     ios_api = IosApi(caller)
-    ios_lib = IosLib(caller)
-    helper = Helper
-    for key, value in vars(arguments).items():
-        if key == 'backup' and value is True:
-            # testing only
-            output = ios_lib.backup_config_ios()
-        elif key == 'trace' and value is True:
-            cmd = key
-            prefix = helper.validate_prefix(arguments.prefix)
-            if prefix.version == 6:
-                print(f"IPv6 Prefix, {prefix}")
-                output = ios_api.show_ipv6_route(cmd, prefix.exploded)
-            else:
-                print(f"IPv4 Prefix, {prefix}")
-                output = ios_api.show_ipv4_route(cmd, prefix.exploded)
+    helper = Helper()
+    for key in vars(arguments).keys():
+        cmd = str(key)
+        prefix = helper.validate_prefix(arguments.prefix)
+        if prefix.version == 6:
+            print(f"IPv6 Prefix, {prefix}")
+            output = ios_api.show_ipv6_route(cmd, prefix.exploded)
+        else:
+            print(f"IPv4 Prefix, {prefix}")
+            output = ios_api.show_ipv4_route(cmd, prefix.exploded)
 
     print(output)
     return output
 
 
-def frr_cli(prefix):
+def frr_cli():
     # check for valid ipv4 or ipv4 prefix
     print("Frr cli")
 

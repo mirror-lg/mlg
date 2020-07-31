@@ -294,8 +294,7 @@ min-similarity-lines=4
 
 # List of note tags to take in consideration, separated by a comma.
 notes=FIXME,
-      XXX,
-      TODO
+      XXX
 
 
 [BASIC]

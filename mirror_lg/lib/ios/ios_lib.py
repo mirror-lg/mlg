@@ -52,6 +52,8 @@ class IosLib:
     """Class provides methods for interaction with a device running
     Cisco legacy IOS"""
 
+    # pylint: disable=too-many-arguments
+    # could fix this by passing in a single object with the required attributes
     def __init__(self,
                  target_device: str = None,
                  ssh_key: str = None,
