@@ -91,18 +91,18 @@ def _execute_cli() -> None:
 def ios_cli(arguments: Namespace, caller) -> Dict:
     ios_api = IosApi(caller)
     helper = Helper()
-    for key in vars(arguments).keys():
-        cmd = str(key)
-        prefix = helper.validate_prefix(arguments.prefix)
-        if prefix.version == 6:
-            print(f"IPv6 Prefix, {prefix}")
-            output = ios_api.show_ipv6_route(cmd, prefix.exploded)
-        else:
-            print(f"IPv4 Prefix, {prefix}")
-            output = ios_api.show_ipv4_route(cmd, prefix.exploded)
-
-    print(output)
-    return output
+    for key, value in vars(arguments).items():
+        if key == 'trace' and value is True:
+            cmd = key
+            prefix = helper.validate_prefix(arguments.prefix)
+            if prefix.version == 6:
+                print(f"IPv6 Prefix, {prefix}")
+                output = ios_api.show_ipv6_route(cmd, prefix.exploded)
+                print(output)
+            else:
+                print(f"IPv4 Prefix, {prefix}")
+                output = ios_api.show_ipv4_route(cmd, prefix.exploded)
+                print(output)
 
 
 def frr_cli():
