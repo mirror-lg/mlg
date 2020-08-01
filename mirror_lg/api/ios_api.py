@@ -26,13 +26,49 @@ class IosApi:
         self.ipv4_commands = ipv4_commands
         self.ipv6_commands = ipv6_commands
 
+    def show_ipv4_traceroute(self, cmd: str, prefix: str) -> Dict:
+        """
+        execute show ipv4 route command
+        """
+        print(cmd)
+        prefix = parse_exploded_address(prefix)
+        output = self.caller.run_command(self.ipv4_commands(cmd, prefix))
+
+        return output
+
     def show_ipv4_route(self, cmd: str, prefix: str) -> Dict:
         """
         execute show ipv4 route command
         """
         prefix = parse_exploded_address(prefix)
-
         output = self.caller.run_command(self.ipv4_commands(cmd, prefix))
+
+        return output
+
+    def show_ipv4_bgp(self, cmd: str, prefix: str) -> Dict:
+        """
+        execute show ipv4 route command
+        """
+        prefix = parse_exploded_address(prefix)
+        output = self.caller.run_command(self.ipv4_commands(cmd, prefix))
+
+        return output
+
+    def show_ipv4_bgp_sum(self, cmd: str, prefix: str) -> Dict:
+        """
+        execute show ipv4 route command
+        """
+        prefix = parse_exploded_address(prefix)
+        output = self.caller.run_command(self.ipv4_commands(cmd, prefix))
+
+        return output
+
+    def show_ipv6_traceroute(self, cmd: str, prefix: str) -> Dict:
+        """
+        execute show ipv6 route command
+        """
+        prefix = parse_exploded_address(prefix)
+        output = self.caller.run_command(self.ipv6_commands(cmd, prefix))
 
         return output
 
@@ -41,7 +77,24 @@ class IosApi:
         execute show ipv6 route command
         """
         prefix = parse_exploded_address(prefix)
+        output = self.caller.run_command(self.ipv6_commands(cmd, prefix))
 
+        return output
+
+    def show_ipv6_bgp(self, cmd: str, prefix: str) -> Dict:
+        """
+        execute show ipv6 route command
+        """
+        prefix = parse_exploded_address(prefix)
+        output = self.caller.run_command(self.ipv6_commands(cmd, prefix))
+
+        return output
+
+    def show_ipv6_bgp_sum(self, cmd: str, prefix: str) -> Dict:
+        """
+        execute show ipv6 route command
+        """
+        prefix = parse_exploded_address(prefix)
         output = self.caller.run_command(self.ipv6_commands(cmd, prefix))
 
         return output
