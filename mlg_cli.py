@@ -89,6 +89,7 @@ def _execute_cli() -> None:
 
 
 def ios_cli(arguments: Namespace, caller) -> Dict:
+    # pylint: disable=too-many-branches
     ios_api = IosApi(caller)
     helper = Helper()
     for key, value in vars(arguments).items():
@@ -96,13 +97,32 @@ def ios_cli(arguments: Namespace, caller) -> Dict:
             cmd = key
             prefix = helper.validate_prefix(arguments.prefix)
             if prefix.version == 6:
-                print(f"IPv6 Prefix, {prefix}")
-                output = ios_api.show_ipv6_route(cmd, prefix.exploded)
-                print(output)
+                output = ios_api.show_ipv6_traceroute(cmd, prefix.exploded)
             else:
-                print(f"IPv4 Prefix, {prefix}")
+                output = ios_api.show_ipv4_traceroute(cmd, prefix.exploded)
+        elif key == 'sh_ip_route' and value is True:
+            cmd = key
+            prefix = helper.validate_prefix(arguments.prefix)
+            if prefix.version == 6:
+                output = ios_api.show_ipv6_route(cmd, prefix.exploded)
+            else:
                 output = ios_api.show_ipv4_route(cmd, prefix.exploded)
-                print(output)
+        elif key == 'sh_ip_bgp' and value is True:
+            cmd = key
+            prefix = helper.validate_prefix(arguments.prefix)
+            if prefix.version == 6:
+                output = ios_api.show_ipv6_bgp(cmd, prefix.exploded)
+            else:
+                output = ios_api.show_ipv4_bgp(cmd, prefix.exploded)
+        elif key == 'sh_bgp_sum' and value is True:
+            cmd = key
+            prefix = helper.validate_prefix(arguments.prefix)
+            if prefix.version == 6:
+                output = ios_api.show_ipv6_bgp_sum(cmd, prefix.exploded)
+            else:
+                output = ios_api.show_ipv4_bgp_sum(cmd, prefix.exploded)
+
+    print(output)
 
 
 def frr_cli():
