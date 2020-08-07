@@ -89,6 +89,7 @@ def _execute_cli() -> None:
 
 
 def ios_cli(arguments: Namespace, caller) -> Dict:
+    # pylint: disable=too-many-branches
     ios_api = IosApi(caller)
     helper = Helper()
     for key, value in vars(arguments).items():
