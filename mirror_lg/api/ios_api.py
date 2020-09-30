@@ -6,7 +6,6 @@ from __future__ import annotations
 import logging
 from typing import Dict
 
-from mirror_lg.lib.ios.ios_lib import IosLib
 from mirror_lg.lib.ios.ios_lib import ipv4_commands
 from mirror_lg.lib.ios.ios_lib import ipv6_commands
 from mirror_lg.lib.parsers import parse_exploded_address

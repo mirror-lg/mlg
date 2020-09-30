@@ -10,6 +10,8 @@ from argparse import Namespace
 from mirror_lg.lib.helpers import Helper
 from mirror_lg.lib.ios.ios_lib import IosLib
 from mirror_lg.api.ios_api import IosApi
+from mirror_lg.lib.frr.frr_lib import FrrLib
+from mirror_lg.api.frr_api import FrrApi
 
 
 def _execute_cli() -> None:
@@ -63,6 +65,16 @@ def _execute_cli() -> None:
                                 # help=argparse.SUPPRESS,
                                 default=False)
 
+    frr_cli_parser = subparsers.add_parser('frr_cli',
+                                           help='Run commands on frr devices')
+    frr_cli_parser.set_defaults(func=frr_cli)
+    frr_cli_parser.add_argument('--sh_ip_route',
+                                action='store_true',
+                                help='route table lookup',
+                                default=False)
+
+
+
     arguments = parser.parse_args()
 
     def _load_config():
@@ -81,8 +93,15 @@ def _execute_cli() -> None:
 
     _load_config()
 
-    caller = IosLib(target_device=arguments.target, username=arguments.username,
-                    password=arguments.password)
+    # instantiate the correct class
+    if "ios_cli" in arguments.func.__name__:
+        caller = IosLib(target_device=arguments.target,
+                        username=arguments.username,
+                        password=arguments.password)
+    elif "frr_cli" in arguments.func.__name__:
+        caller = FrrLib(target_device=arguments.target,
+                        username=arguments.username,
+                        password=arguments.password)
 
     # pass outputs to selected function
     arguments.func(arguments, caller)
@@ -125,9 +144,19 @@ def ios_cli(arguments: Namespace, caller) -> Dict:
     print(output)
 
 
-def frr_cli():
-    # check for valid ipv4 or ipv4 prefix
-    print("Frr cli")
+def frr_cli(arguments: Namespace, caller) -> Dict:
+    frr_api = FrrApi(caller)
+    helper = Helper()
+    for key, value in vars(arguments).items():
+        if key == 'sh_ip_route' and value is True:
+            cmd = key
+            prefix = helper.validate_prefix(arguments.prefix)
+            if prefix.version == 6:
+                output = frr_api.show_ipv6_route(cmd, prefix.exploded)
+            else:
+                output = frr_api.show_ipv4_route(cmd, prefix.exploded)
+
+    print(output)
 
 
 def main():
