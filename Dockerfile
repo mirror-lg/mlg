@@ -14,7 +14,7 @@ COPY tests tests
 COPY *.py ./
 # run the tests, --skip-covered == ignore __init__.py files
 RUN python -m coverage run --branch --source=mirror_lg -m unittest discover && \
-    python -m coverage report --fail-under 70 -m --skip-covered
+    python -m coverage report --fail-under 67 -m --skip-covered
 # execute linter
 COPY pylintrc ./
 RUN pylint --rcfile=pylintrc mlg_cli.py mirror_lg tests
