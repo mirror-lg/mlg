@@ -28,8 +28,10 @@ class IosApi:
     def show_ipv4_traceroute(self, cmd: str, prefix: str) -> Dict:
         """
         execute show ipv4 route command
+
+        NOTE: api assumes that a dns resolver is enabled on the ios device, if
+        it is not a timeout will occur.
         """
-        print(cmd)
         prefix = parse_exploded_address(prefix)
         output = self.caller.run_command(self.ipv4_commands(cmd, prefix))
 

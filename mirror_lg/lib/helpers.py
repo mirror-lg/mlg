@@ -3,6 +3,9 @@ Shared library functions
 """
 import ipaddress
 import logging
+from typing import Dict
+
+import yaml
 
 
 class Helper:
@@ -26,3 +29,20 @@ class Helper:
             raise invalid_prefix
 
         return prefix
+
+    def load_config_file(self, filename='./config/mlg_conf.yaml') -> Dict:
+        """
+        load device info from yaml config file
+
+        default location/filename is:
+        './config/mlg_conf.yaml'
+        """
+
+        try:
+            with open(filename) as config_file:
+                device_config = yaml.safe_load(config_file)
+        except FileNotFoundError as file_not_found:
+            self.logger.error(f"Config file not found, {file_not_found}")
+            raise file_not_found
+
+        return device_config

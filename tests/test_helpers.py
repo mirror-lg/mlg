@@ -40,3 +40,19 @@ class TestHelpers(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             self.helper.validate_prefix(self.ipv6_error)
+
+    def test_load_config_file(self):
+        """test yaml config file loads as expected"""
+        output = self.helper.load_config_file()
+
+        expected_output = {
+            'inventory': {
+                'frr_lab': {
+                    'fqdn': '172.16.17.14',
+                    'nos': 'frr',
+                    'username': 'eve',
+                    'password': 'eve',
+                    'ssh_key': None}
+            }}
+
+        self.assertEqual(expected_output, output)
