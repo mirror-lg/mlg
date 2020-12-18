@@ -2,7 +2,7 @@ FROM python:3.8
 WORKDIR /temp/work_dir
 
 # update pip
-RUN pip install --upgrade pip
+RUN python -m pip install --upgrade pip
 
 # install packages
 COPY requirements.txt /temp/work_dir
