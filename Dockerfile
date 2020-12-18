@@ -9,7 +9,8 @@ COPY requirements.txt /temp/work_dir
 RUN pip install -r requirements.txt
 COPY mirror_lg mirror_lg
 COPY config config
-# add test to verify YAML config file (once config is converted to YAML)
+# verify config file contains valid YAML)
+RUN yamllint ./config/mlg_conf.yaml
 COPY tests tests
 COPY *.py ./
 # run the tests, --skip-covered == ignore __init__.py files

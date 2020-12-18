@@ -1,0 +1,8 @@
+---
+inventory:
+  frr_lab:
+    fqdn: 172.16.17.14
+    nos: frr
+    username: eve
+    password: eve
+    ssh_key:

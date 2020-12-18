@@ -1,0 +1,9 @@
+---                     # example YAML config file
+inventory:
+  device_1_name:        # router / switch name as seen in gui
+    fqdn:               # fqdn or IP of target device
+    nos:                # network os name eg: ios, nxos, junos, frr
+    username:           # username to connect to specified device
+    password:           # users corresponding password
+    ssh_key:            # location of ssh key on disk (if using key auth)
+
