@@ -12,6 +12,7 @@ from mirror_lg.lib.ios.ios_lib import IosLib
 from mirror_lg.api.ios_api import IosApi
 from mirror_lg.lib.frr.frr_lib import FrrLib
 from mirror_lg.api.frr_api import FrrApi
+from mirror_lg.logging_decorator import error_logging
 
 
 def _execute_cli() -> None:
@@ -159,6 +160,7 @@ def frr_cli(arguments: Namespace, caller) -> Dict:
     print(output)
 
 
+@error_logging
 def main():
     _execute_cli()
 
