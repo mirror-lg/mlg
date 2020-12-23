@@ -2,27 +2,23 @@
 Logging config decorator
 """
 
-import sys
 import functools
 import logging
 
 
-def logger_object(verbose='n'):
+def log_to_file():
     """
     Create logging object
     """
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
     log_format = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        "%Y-%m-%d %H:%M:%S")
 
-    # setup stdout and file logging
+    # setup file logging
     file_log = logging.FileHandler("./mirror_lg/logs/mirror_lg.log")
     file_log.setFormatter(log_format)
-    if verbose == 'y':
-        stdout_log = logging.StreamHandler(sys.stdout)
-        stdout_log.setFormatter(log_format)
-        logger.addHandler(stdout_log)
 
     # attach to logger object
     logger.addHandler(file_log)
@@ -33,7 +29,7 @@ def logger_object(verbose='n'):
 def error_logging(function):
     @functools.wraps(function)
     def wrapper(*args, **kwargs):
-        logger = logger_object()
+        logger = log_to_file()
         try:
             return function(*args, **kwargs)
         except Exception as e:

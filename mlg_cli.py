@@ -12,7 +12,8 @@ from mirror_lg.lib.ios.ios_lib import IosLib
 from mirror_lg.api.ios_api import IosApi
 from mirror_lg.lib.frr.frr_lib import FrrLib
 from mirror_lg.api.frr_api import FrrApi
-from mirror_lg.logging_decorator import error_logging
+from mirror_lg.decorators.logging import error_logging
+from mirror_lg.lib.logging.verbose import verbose_logging
 
 
 def _execute_cli() -> None:
@@ -34,6 +35,11 @@ def _execute_cli() -> None:
                         type=str,
                         help="Destination prefix for route table lookup",
                         required=True)
+
+    parser.add_argument('--verbose',
+                        action="store_true",
+                        help="Enable logging to stdout",
+                        required=False)
 
     subparsers = parser.add_subparsers(title='NOS specific commands',
                                        description='specific network operating '
@@ -74,8 +80,6 @@ def _execute_cli() -> None:
                                 help='route table lookup',
                                 default=False)
 
-
-
     arguments = parser.parse_args()
 
     def _load_config():
@@ -103,6 +107,10 @@ def _execute_cli() -> None:
         caller = FrrLib(target_device=arguments.target,
                         username=arguments.username,
                         password=arguments.password)
+
+    # enable verbose logging if required
+    if arguments.verbose:
+        verbose_logging()
 
     # pass outputs to selected function
     arguments.func(arguments, caller)
